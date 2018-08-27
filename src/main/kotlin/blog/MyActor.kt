@@ -1,11 +1,17 @@
 package blog
 
-import akka.actor.AbstractLoggingActor
-import akka.actor.ActorRef
+import akka.actor.AbstractActor
 import akka.japi.pf.ReceiveBuilder
+import java.lang.Thread.sleep
 
-class MyActor : AbstractLoggingActor() {
+class MyActor : AbstractActor() {
+
+    var count: Int = 0
+
     override fun createReceive() = ReceiveBuilder().match(String::class.java) {
-        sender.tell("HELLO FROM ACTOR", ActorRef.noSender())
+        println(self.path().name() + " DOING IT")
+        sleep(5000)
+        sender.tell(it + self.path().name(), self)
+        println(self.path().name() + " FINISH IT " + count++)
     }.build()
 }

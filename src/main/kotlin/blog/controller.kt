@@ -18,6 +18,7 @@ import scala.concurrent.duration.Duration
 class GreetingController(val actorSystem: ActorSystem) {
 
     val counter = AtomicLong()
+    val actor = actorSystem.actorOf(Props.create(MyActor::class.java))
 
     @GetMapping("/greeting")
     fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
@@ -25,8 +26,8 @@ class GreetingController(val actorSystem: ActorSystem) {
 
     @GetMapping("/greetActor")
     fun greetingActor(): String {
-        val actor = actorSystem.actorOf(Props.create(MyActor::class.java))
-        val timeout = Timeout(Duration.create(5, "seconds"))
+
+        val timeout = Timeout(Duration.create(10, "seconds"))
         val future = Patterns.ask(actor, "Hello Actor", timeout)
         //actorSystem.actorOf(Props.create(MyActor::class.java)).ask("Hello Actor", ActorRef.noSender())
         return Await.result(future, timeout.duration()) as String
