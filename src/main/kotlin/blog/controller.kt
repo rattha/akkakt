@@ -1,24 +1,21 @@
 package blog
 
-import akka.actor.ActorRef
 import akka.actor.ActorSystem
-import akka.actor.Props
+import akka.pattern.Patterns
+import akka.util.Timeout
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.atomic.AtomicLong
-import akka.actor.*
-import akka.pattern.Patterns
-import akka.util.Timeout
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+import java.util.concurrent.atomic.AtomicLong
 
 
 @RestController
-class GreetingController(val actorSystem: ActorSystem) {
+class GreetingController(val actorSystem: ActorSystem, val ext: SpringExtension) {
 
     val counter = AtomicLong()
-    val actor = actorSystem.actorOf(Props.create(MyActor::class.java))
+    val actor = actorSystem.actorOf(ext.props("myActor"))
 
     @GetMapping("/greeting")
     fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
@@ -26,6 +23,7 @@ class GreetingController(val actorSystem: ActorSystem) {
 
     @GetMapping("/greetActor")
     fun greetingActor(): String {
+
 
         val timeout = Timeout(Duration.create(10, "seconds"))
         val future = Patterns.ask(actor, "Hello Actor", timeout)
