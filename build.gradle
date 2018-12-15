@@ -49,6 +49,7 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-reflect")
     compile group: 'com.typesafe.akka', name: 'akka-actor_2.12', version: '2.5.15'
     compile group: 'com.typesafe.akka', name: 'akka-persistence_2.12', version: '2.5.15'
+	compile group: 'com.typesafe.akka', name: 'akka-stream_2.12', version: '2.5.19'
     runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

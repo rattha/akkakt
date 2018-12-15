@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+import java.lang.Thread.sleep
 
 @Component
 @Lazy
@@ -20,6 +21,8 @@ class MyActor(val actorSystem: ActorSystem, val ext: SpringExtension): AbstractA
     var count: Int = 0
 
     override fun createReceive() = ReceiveBuilder().match(String::class.java) {
+
+        sleep(5000)
 
         val actor2 = actorSystem.actorOf(ext.props("myActor2"))
 
